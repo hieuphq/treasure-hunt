@@ -48,4 +48,20 @@ defmodule TreasureHunt.CoreFixtures do
 
     location
   end
+
+  @doc """
+  Generate a clue.
+  """
+  def clue_fixture(attrs \\ %{}) do
+    {:ok, clue} =
+      attrs
+      |> Enum.into(%{
+        done_at: ~N[2022-11-28 09:00:00],
+        sort: 42,
+        status: "some status"
+      })
+      |> TreasureHunt.Core.create_clue()
+
+    clue
+  end
 end

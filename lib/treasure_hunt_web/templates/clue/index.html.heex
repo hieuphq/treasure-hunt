@@ -1,0 +1,30 @@
+<h1>Listing Clues</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Status</th>
+      <th>Sort</th>
+      <th>Done at</th>
+
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+<%= for clue <- @clues do %>
+    <tr>
+      <td><%= clue.status %></td>
+      <td><%= clue.sort %></td>
+      <td><%= clue.done_at %></td>
+
+      <td>
+        <span><%= link "Show", to: Routes.clue_path(@conn, :show, clue) %></span>
+        <span><%= link "Edit", to: Routes.clue_path(@conn, :edit, clue) %></span>
+        <span><%= link "Delete", to: Routes.clue_path(@conn, :delete, clue), method: :delete, data: [confirm: "Are you sure?"] %></span>
+      </td>
+    </tr>
+<% end %>
+  </tbody>
+</table>
+
+<span><%= link "New Clue", to: Routes.clue_path(@conn, :new) %></span>

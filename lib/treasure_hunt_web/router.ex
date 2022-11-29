@@ -21,6 +21,7 @@ defmodule TreasureHuntWeb.Router do
     resources "/teams", TeamController
     resources "/questions", QuestionController
     resources "/locations", LocationController
+    resources "/clues", ClueController
   end
 
   # Other scopes may use custom stacks.
