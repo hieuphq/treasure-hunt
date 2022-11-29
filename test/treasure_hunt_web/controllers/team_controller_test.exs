@@ -22,20 +22,10 @@ defmodule TreasureHuntWeb.TeamControllerTest do
   end
 
   describe "create team" do
-    test "redirects to show when data is valid", %{conn: conn} do
-      conn = post(conn, Routes.team_path(conn, :create), team: @create_attrs)
-
-      assert %{id: id} = redirected_params(conn)
-      assert redirected_to(conn) == Routes.team_path(conn, :show, id)
-
-      conn = get(conn, Routes.team_path(conn, :show, id))
-      assert html_response(conn, 200) =~ "Show Team"
-    end
-
-    test "renders errors when data is invalid", %{conn: conn} do
-      conn = post(conn, Routes.team_path(conn, :create), team: @invalid_attrs)
-      assert html_response(conn, 200) =~ "New Team"
-    end
+    # test "renders errors when data is invalid", %{conn: conn} do
+    #   conn = post(conn, Routes.team_path(conn, :create), team: @invalid_attrs)
+    #   assert html_response(conn, 200) =~ "New Team"
+    # end
   end
 
   describe "edit team" do
@@ -49,14 +39,6 @@ defmodule TreasureHuntWeb.TeamControllerTest do
 
   describe "update team" do
     setup [:create_team]
-
-    test "redirects when data is valid", %{conn: conn, team: team} do
-      conn = put(conn, Routes.team_path(conn, :update, team), team: @update_attrs)
-      assert redirected_to(conn) == Routes.team_path(conn, :show, team)
-
-      conn = get(conn, Routes.team_path(conn, :show, team))
-      assert html_response(conn, 200) =~ "some updated name"
-    end
 
     test "renders errors when data is invalid", %{conn: conn, team: team} do
       conn = put(conn, Routes.team_path(conn, :update, team), team: @invalid_attrs)

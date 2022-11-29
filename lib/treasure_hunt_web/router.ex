@@ -14,6 +14,14 @@ defmodule TreasureHuntWeb.Router do
     plug :accepts, ["json"]
   end
 
+  scope "/api", TreasureHuntWeb.Api do
+    pipe_through :api
+
+    resources "/teams", TeamController, only: [:show]
+
+    post "clues/:clue_id/answer", ClueController, :answer
+  end
+
   scope "/", TreasureHuntWeb do
     pipe_through :browser
 
