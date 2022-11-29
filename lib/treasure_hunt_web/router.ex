@@ -18,6 +18,9 @@ defmodule TreasureHuntWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
+    resources "/teams", TeamController
+    resources "/questions", QuestionController
+    resources "/locations", LocationController
   end
 
   # Other scopes may use custom stacks.
@@ -37,9 +40,6 @@ defmodule TreasureHuntWeb.Router do
 
     scope "/" do
       pipe_through :browser
-      resources "/teams", TreasureHuntWeb.TeamController
-      resources "/questions", TreasureHuntWeb.QuestionController
-      resources "/locations", TreasureHuntWeb.LocationController
 
       live_dashboard "/dashboard", metrics: TreasureHuntWeb.Telemetry
     end
