@@ -37,6 +37,9 @@ defmodule TreasureHuntWeb.Router do
 
     scope "/" do
       pipe_through :browser
+      resources "/teams", TreasureHuntWeb.TeamController
+      resources "/questions", TreasureHuntWeb.QuestionController
+      resources "/locations", TreasureHuntWeb.LocationController
 
       live_dashboard "/dashboard", metrics: TreasureHuntWeb.Telemetry
     end
