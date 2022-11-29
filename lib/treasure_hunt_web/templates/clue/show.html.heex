@@ -1,0 +1,23 @@
+<h1>Show Clue</h1>
+
+<ul>
+
+  <li>
+    <strong>Status:</strong>
+    <%= @clue.status %>
+  </li>
+
+  <li>
+    <strong>Sort:</strong>
+    <%= @clue.sort %>
+  </li>
+
+  <li>
+    <strong>Done at:</strong>
+    <%= @clue.done_at %>
+  </li>
+
+</ul>
+
+<span><%= link "Edit", to: Routes.clue_path(@conn, :edit, @clue) %></span> |
+<span><%= link "Back", to: Routes.clue_path(@conn, :index) %></span>

@@ -1,0 +1,5 @@
+<h1>Edit Clue</h1>
+
+<%= render "form.html", Map.put(assigns, :action, Routes.clue_path(@conn, :update, @clue)) %>
+
+<span><%= link "Back", to: Routes.clue_path(@conn, :index) %></span>

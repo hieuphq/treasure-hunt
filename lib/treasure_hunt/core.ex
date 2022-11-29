@@ -293,4 +293,112 @@ defmodule TreasureHunt.Core do
   def change_location(%Location{} = location, attrs \\ %{}) do
     Location.changeset(location, attrs)
   end
+
+  alias TreasureHunt.Core.Clue
+
+  @doc """
+  Returns the list of clues.
+
+  ## Examples
+
+      iex> list_clues()
+      [%Clue{}, ...]
+
+  """
+  def list_clues do
+    Repo.all(Clue)
+  end
+
+  def list_clues_by_team_id(team_id) do
+    query =
+      from c in Clue,
+        where: c.team_id == ^team_id,
+        preload: [:question, :location]
+
+    Repo.all(query)
+  end
+
+  @doc """
+  Gets a single clue.
+
+  Raises `Ecto.NoResultsError` if the Clue does not exist.
+
+  ## Examples
+
+      iex> get_clue!(123)
+      %Clue{}
+
+      iex> get_clue!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_clue!(id) do
+    Repo.get!(Clue, id)
+    |> Repo.preload([:question, :location])
+  end
+
+  @doc """
+  Creates a clue.
+
+  ## Examples
+
+      iex> create_clue(%{field: value})
+      {:ok, %Clue{}}
+
+      iex> create_clue(%{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def create_clue(attrs \\ %{}) do
+    %Clue{}
+    |> Clue.changeset(attrs)
+    |> Repo.insert()
+  end
+
+  @doc """
+  Updates a clue.
+
+  ## Examples
+
+      iex> update_clue(clue, %{field: new_value})
+      {:ok, %Clue{}}
+
+      iex> update_clue(clue, %{field: bad_value})
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def update_clue(%Clue{} = clue, attrs) do
+    clue
+    |> Clue.changeset(attrs)
+    |> Repo.update()
+  end
+
+  @doc """
+  Deletes a clue.
+
+  ## Examples
+
+      iex> delete_clue(clue)
+      {:ok, %Clue{}}
+
+      iex> delete_clue(clue)
+      {:error, %Ecto.Changeset{}}
+
+  """
+  def delete_clue(%Clue{} = clue) do
+    Repo.delete(clue)
+  end
+
+  @doc """
+  Returns an `%Ecto.Changeset{}` for tracking clue changes.
+
+  ## Examples
+
+      iex> change_clue(clue)
+      %Ecto.Changeset{data: %Clue{}}
+
+  """
+  def change_clue(%Clue{} = clue, attrs \\ %{}) do
+    Clue.changeset(clue, attrs)
+  end
 end

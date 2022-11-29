@@ -145,7 +145,12 @@ defmodule TreasureHunt.CoreTest do
 
     test "update_location/2 with valid data updates the location" do
       location = location_fixture()
-      update_attrs = %{address: "some updated address", name: "some updated name", plus_code: "some updated plus_code"}
+
+      update_attrs = %{
+        address: "some updated address",
+        name: "some updated name",
+        plus_code: "some updated plus_code"
+      }
 
       assert {:ok, %Location{} = location} = Core.update_location(location, update_attrs)
       assert location.address == "some updated address"
