@@ -15,7 +15,7 @@ defmodule TreasureHuntWeb.TeamController do
   end
 
   def create(conn, %{"team" => team_params}) do
-    case Core.create_team(team_params) do
+    case Core.generate_team(team_params) do
       {:ok, team} ->
         conn
         |> put_flash(:info, "Team created successfully.")

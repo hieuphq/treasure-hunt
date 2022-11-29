@@ -5,7 +5,7 @@ defmodule TreasureHunt.Repo.Migrations.CreateClues do
     create table(:clues) do
       add :status, :string
       add :sort, :integer
-      add :done_at, :naive_datetime
+      add :done_at, :naive_datetime, default: nil
       add :team_id, references(:teams, on_delete: :nothing)
       add :location_id, references(:locations, on_delete: :nothing)
       add :question_id, references(:questions, on_delete: :nothing)

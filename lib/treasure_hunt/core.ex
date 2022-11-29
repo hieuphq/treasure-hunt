@@ -55,6 +55,72 @@ defmodule TreasureHunt.Core do
     |> Repo.insert()
   end
 
+  def generate_team(attrs \\ %{}) do
+    rs =
+      %Team{}
+      |> Team.changeset(attrs)
+      |> Repo.insert()
+
+    case rs do
+      {:ok, team} ->
+        generate_clue(team.id)
+    end
+
+    rs
+  end
+
+  defp generate_clue(team_id) do
+    locations = list_locations()
+    questions = list_questions()
+
+    intitial_data = %{locations: locations, questions: questions, result: []}
+
+    pre_data =
+      Enum.reduce(1..4, intitial_data, fn idx, %{locations: locs, questions: ques, result: rs} ->
+        random_loc = Enum.random(locs)
+
+        filtered_locs =
+          if length(locs) <= 1 do
+            locs
+          else
+            Enum.filter(locs, fn l -> l.id != random_loc.id end)
+          end
+
+        random_question = Enum.random(locs)
+
+        filtered_ques =
+          if length(ques) <= 1 do
+            ques
+          else
+            Enum.filter(ques, fn l -> l.id != random_question.id end)
+          end
+
+        raw = %{
+          location_id: random_loc.id,
+          question_id: random_question.id,
+          sort: idx
+        }
+
+        %{
+          locations: filtered_locs,
+          questions: filtered_ques,
+          result: [raw | rs]
+        }
+      end)
+
+    Enum.map(pre_data.result, fn %{location_id: location_id, question_id: question_id, sort: sort} ->
+      %TreasureHunt.Core.Clue{
+        location_id: location_id,
+        question_id: question_id,
+        team_id: team_id,
+        done_at: nil,
+        sort: sort,
+        status: "new"
+      }
+      |> TreasureHunt.Repo.insert!()
+    end)
+  end
+
   @doc """
   Updates a team.
 
