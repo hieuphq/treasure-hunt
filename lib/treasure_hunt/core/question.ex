@@ -5,6 +5,7 @@ defmodule TreasureHunt.Core.Question do
   schema "questions" do
     field :answer, :string
     field :content, :string
+    field :code, :string
 
     timestamps()
   end

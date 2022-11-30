@@ -20,6 +20,7 @@ defmodule TreasureHuntWeb.Router do
     resources "/teams", TeamController, only: [:show]
 
     post "/clues/:clue_id/answer", ClueController, :answer
+    get "/questions/:code", QuestionController, :show
   end
 
   scope "/", TreasureHuntWeb do

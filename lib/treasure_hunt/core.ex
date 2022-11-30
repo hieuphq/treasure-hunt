@@ -200,6 +200,22 @@ defmodule TreasureHunt.Core do
   def get_question!(id), do: Repo.get!(Question, id)
 
   @doc """
+  Gets a single question by code.
+
+  Raises `Ecto.NoResultsError` if the Question does not exist.
+
+  ## Examples
+
+      iex> get_question_by_code!(123)
+      %Question{}
+
+      iex> get_question_by_code!(456)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_question_by_code!(code), do: Repo.get_by(Question, code: code)
+
+  @doc """
   Creates a question.
 
   ## Examples
