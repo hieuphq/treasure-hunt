@@ -17,9 +17,9 @@ defmodule TreasureHuntWeb.Router do
   scope "/api", TreasureHuntWeb.Api do
     pipe_through :api
 
-    resources "/teams", TeamController, only: [:show]
+    resources "/teams", ApiTeamController, only: [:show]
 
-    post "clues/:clue_id/answer", ClueController, :answer
+    post "/clues/:clue_id/answer", ApiClueController, :answer
   end
 
   scope "/", TreasureHuntWeb do
