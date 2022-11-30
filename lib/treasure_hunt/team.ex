@@ -4,9 +4,9 @@ defmodule TreasureHunt.Team do
   alias TreasureHunt.Core.Team
   alias TreasureHunt.Core
 
-  def get_by_id(id) do
-    with %Team{} <- Core.get_team!(id) do
-      clues = Core.list_clues_by_team_id(id)
+  def get_by_code(code) do
+    with %Team{id: team_id} <- Core.get_team_by_code(code) do
+      clues = Core.list_clues_by_team_id(team_id)
 
       clues_total = length(clues)
 

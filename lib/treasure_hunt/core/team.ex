@@ -1,6 +1,7 @@
 defmodule TreasureHunt.Core.Team do
   use Ecto.Schema
   import Ecto.Changeset
+  alias TreasureHunt.Util
 
   schema "teams" do
     field :name, :string
@@ -19,8 +20,7 @@ defmodule TreasureHunt.Core.Team do
 
   def update_code(%{valid?: false} = t), do: t
 
-  @alphabet "123456789abcdefghjkmnpqrstuvwxyzABCDEFGHJKMNPQRSTUVWXYZ"
   def update_code(team) do
-    put_change(team, :code, Nanoid.generate(6, @alphabet))
+    put_change(team, :code, Util.generate_code(6))
   end
 end

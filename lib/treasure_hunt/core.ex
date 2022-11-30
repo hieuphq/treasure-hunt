@@ -4,6 +4,7 @@ defmodule TreasureHunt.Core do
   """
 
   import Ecto.Query, warn: false
+  alias TreasureHunt.Util
   alias TreasureHunt.Repo
   alias TreasureHunt.Core.Team
   alias TreasureHunt.Core.Clue
@@ -37,6 +38,8 @@ defmodule TreasureHunt.Core do
   """
   def get_team!(id), do: Repo.get!(Team, id)
 
+  def get_team_by_code(id), do: Repo.get_by(Team, code: id)
+
   @doc """
   Creates a team.
 
@@ -63,13 +66,13 @@ defmodule TreasureHunt.Core do
 
     case rs do
       {:ok, team} ->
-        generate_clue(team.id)
+        generate_clue(team.id, team.code)
     end
 
     rs
   end
 
-  defp generate_clue(team_id) do
+  defp generate_clue(team_id, team_code) do
     locations = list_locations()
     questions = list_questions()
 
@@ -95,10 +98,14 @@ defmodule TreasureHunt.Core do
             Enum.filter(ques, fn l -> l.id != random_question.id end)
           end
 
+        raw_code = "#{random_question.code}#{team_code}"
+        hashed_code = :crypto.hash(:md5, raw_code) |> Base.encode16(case: :lower)
+
         raw = %{
           location_id: random_loc.id,
           question_id: random_question.id,
-          sort: idx
+          sort: idx,
+          code: hashed_code
         }
 
         %{
@@ -108,14 +115,20 @@ defmodule TreasureHunt.Core do
         }
       end)
 
-    Enum.map(pre_data.result, fn %{location_id: location_id, question_id: question_id, sort: sort} ->
+    Enum.map(pre_data.result, fn %{
+                                   location_id: location_id,
+                                   question_id: question_id,
+                                   sort: sort,
+                                   code: code
+                                 } ->
       %TreasureHunt.Core.Clue{
         location_id: location_id,
         question_id: question_id,
         team_id: team_id,
         done_at: nil,
         sort: sort,
-        status: "new"
+        status: "new",
+        code: code
       }
       |> TreasureHunt.Repo.insert!()
     end)
@@ -213,7 +226,16 @@ defmodule TreasureHunt.Core do
       ** (Ecto.NoResultsError)
 
   """
-  def get_question_by_code!(code), do: Repo.get_by(Question, code: code)
+  def get_question_by_hashed_code!(code) do
+    Repo.get_by(Clue, code: code)
+    |> case do
+      nil ->
+        {:error, :not_found}
+
+      %Clue{question_id: question_id} ->
+        Repo.get!(Question, question_id)
+    end
+  end
 
   @doc """
   Creates a question.
@@ -398,7 +420,7 @@ defmodule TreasureHunt.Core do
   def list_clues_by_team_id(team_id) do
     query =
       from c in Clue,
-        where: c.code == ^team_id,
+        where: c.team_id == ^team_id,
         preload: [:question, :location]
 
     Repo.all(query)

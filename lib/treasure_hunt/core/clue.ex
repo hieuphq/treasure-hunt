@@ -10,6 +10,7 @@ defmodule TreasureHunt.Core.Clue do
     field :sort, :integer
     field :status, :string
     field :answer, :string
+    field :code, :string
 
     belongs_to :location, Location
     belongs_to :team, Team
