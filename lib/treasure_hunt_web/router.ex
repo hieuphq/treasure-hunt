@@ -27,10 +27,10 @@ defmodule TreasureHuntWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :index
-    resources "/teams", TeamController
-    resources "/questions", QuestionController
-    resources "/locations", LocationController
-    resources "/clues", ClueController
+    # resources "/teams", TeamController
+    # resources "/questions", QuestionController
+    # resources "/locations", LocationController
+    # resources "/clues", ClueController
   end
 
   # Other scopes may use custom stacks.
