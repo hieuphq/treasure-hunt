@@ -398,7 +398,7 @@ defmodule TreasureHunt.Core do
   def list_clues_by_team_id(team_id) do
     query =
       from c in Clue,
-        where: c.team_id == ^team_id,
+        where: c.code == ^team_id,
         preload: [:question, :location]
 
     Repo.all(query)

@@ -7,6 +7,11 @@
     <%= @team.name %>
   </li>
 
+  <li>
+    <strong>Code:</strong>
+    <%= @team.code %>
+  </li>
+
 </ul>
 
 <span><%= link "Edit", to: Routes.team_path(@conn, :edit, @team) %></span> |

@@ -16,8 +16,7 @@ defmodule TreasureHuntWeb.Api.ClueView do
       location: clue.location.plus_code,
       location_name: clue.location.name,
       location_address: clue.location.address,
-      question_code: clue.question.code,
-      question_type: "text"
+      question_code: clue.question.code
     }
   end
 
