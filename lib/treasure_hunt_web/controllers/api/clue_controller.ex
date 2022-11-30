@@ -1,4 +1,4 @@
-defmodule TreasureHuntWeb.ApiClueController do
+defmodule TreasureHuntWeb.Api.ClueController do
   use TreasureHuntWeb, :controller
   alias TreasureHunt.Team
 
