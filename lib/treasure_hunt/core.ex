@@ -5,8 +5,8 @@ defmodule TreasureHunt.Core do
 
   import Ecto.Query, warn: false
   alias TreasureHunt.Repo
-
   alias TreasureHunt.Core.Team
+  alias TreasureHunt.Core.Clue
 
   @doc """
   Returns the list of teams.
@@ -344,6 +344,12 @@ defmodule TreasureHunt.Core do
 
   """
   def delete_location(%Location{} = location) do
+    query =
+      from c in Clue,
+        where: c.location_id == ^location.id
+
+    Repo.delete_all(query)
+
     Repo.delete(location)
   end
 
@@ -359,8 +365,6 @@ defmodule TreasureHunt.Core do
   def change_location(%Location{} = location, attrs \\ %{}) do
     Location.changeset(location, attrs)
   end
-
-  alias TreasureHunt.Core.Clue
 
   @doc """
   Returns the list of clues.
