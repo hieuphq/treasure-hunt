@@ -9,6 +9,7 @@ defmodule TreasureHunt.Core.Clue do
     field :done_at, :naive_datetime
     field :sort, :integer
     field :status, :string
+    field :answer, :string
 
     belongs_to :location, Location
     belongs_to :team, Team
@@ -20,7 +21,7 @@ defmodule TreasureHunt.Core.Clue do
   @doc false
   def changeset(clue, attrs) do
     clue
-    |> cast(attrs, [:status, :sort, :done_at])
+    |> cast(attrs, [:status, :sort, :done_at, :answer])
     |> validate_required([:status, :sort, :done_at])
   end
 end

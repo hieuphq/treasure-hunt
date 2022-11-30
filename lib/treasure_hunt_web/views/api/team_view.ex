@@ -14,7 +14,7 @@ defmodule TreasureHuntWeb.Api.TeamView do
   def render("team.json", %{team: team = %{clue: clue, finished: finished_clues}}) do
     %{
       clue: render_one(clue, ClueView, "clue.json"),
-      finished: render_many(finished_clues, ClueView, "clue.json"),
+      finished: render_many(finished_clues, ClueView, "clue-final.json"),
       status: team.status
     }
   end

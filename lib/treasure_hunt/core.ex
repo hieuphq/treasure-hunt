@@ -86,7 +86,7 @@ defmodule TreasureHunt.Core do
             Enum.filter(locs, fn l -> l.id != random_loc.id end)
           end
 
-        random_question = Enum.random(locs)
+        random_question = Enum.random(ques)
 
         filtered_ques =
           if length(ques) <= 1 do

@@ -13,12 +13,12 @@ defmodule TreasureHunt.Team do
       finished_clues =
         clues
         |> Enum.filter(fn c = %Clue{} -> c.done_at != nil end)
-        |> Enum.sort(&(&1.sort > &2.sort))
+        |> Enum.sort(&(&1.sort < &2.sort))
 
       filtered_clues =
         clues
         |> Enum.filter(fn c = %Clue{} -> c.done_at == nil end)
-        |> Enum.sort(&(&1.sort > &2.sort))
+        |> Enum.sort(&(&1.sort < &2.sort))
 
       filtered_clues_count = length(filtered_clues)
 
@@ -45,8 +45,8 @@ defmodule TreasureHunt.Team do
   def submit_answer(clue_id, answer) do
     with c = %Clue{question: %Question{answer: origin_answer}} <- Core.get_clue!(clue_id),
          {:completed, nil} <- {:completed, c.done_at} do
-      if String.downcase(answer) == String.downcase(origin_answer) do
-        Core.update_clue(c, %{done_at: DateTime.utc_now()})
+      if FuzzyCompare.similarity(String.downcase(origin_answer), String.downcase(answer)) >= 0.8 do
+        Core.update_clue(c, %{done_at: DateTime.utc_now(), answer: answer})
         :ok
       else
         {:error, :wrong}

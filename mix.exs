@@ -50,7 +50,8 @@ defmodule TreasureHunt.MixProject do
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
       {:nanoid, "~> 2.0.5"},
-      {:cors_plug, "~> 3.0"}
+      {:cors_plug, "~> 3.0"},
+      {:fuzzy_compare, "~> 1.0"}
     ]
   end
 
