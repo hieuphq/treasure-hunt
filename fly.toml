@@ -1,6 +1,6 @@
 # fly.toml file generated for treasure-hunt on 2022-11-29T14:23:00+07:00
 
-app = "treasure-hunt"
+app = "df-treasure-hunt-2022"
 kill_signal = "SIGTERM"
 kill_timeout = 5
 processes = []
@@ -9,7 +9,7 @@ processes = []
   release_command = "eval TreasureHunt.Release.migrate"
 
 [env]
-  PHX_HOST = "treasure-hunt.fly.dev"
+  PHX_HOST = "df-treasure-hunt-2022.fly.dev"
   PORT = "8080"
 
 [experimental]
