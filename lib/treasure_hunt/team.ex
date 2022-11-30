@@ -10,10 +10,15 @@ defmodule TreasureHunt.Team do
 
       clues_total = length(clues)
 
+      finished_clues =
+        clues
+        |> Enum.filter(fn c = %Clue{} -> c.done_at != nil end)
+        |> Enum.sort(&(&1.sort > &2.sort))
+
       filtered_clues =
         clues
         |> Enum.filter(fn c = %Clue{} -> c.done_at == nil end)
-        |> Enum.sort(&(&1.sort < &2.sort))
+        |> Enum.sort(&(&1.sort > &2.sort))
 
       filtered_clues_count = length(filtered_clues)
 
@@ -31,7 +36,7 @@ defmodule TreasureHunt.Team do
 
       clue = List.first(filtered_clues, nil)
 
-      %{status: status, clue: clue}
+      %{status: status, clue: clue, finished: finished_clues}
     else
       errs -> errs
     end
