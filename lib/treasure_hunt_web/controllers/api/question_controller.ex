@@ -1,13 +1,12 @@
 defmodule TreasureHuntWeb.Api.QuestionController do
   use TreasureHuntWeb, :controller
-  alias TreasureHunt.Core.Question, as: QuestionModel
   alias TreasureHunt.Question
 
   action_fallback TreasureHuntWeb.FallbackController
 
   def show(conn, %{"code" => code}) do
-    with question = %QuestionModel{} <- Question.get_by_code(code) do
-      render(conn, "show.json", question: question)
+    with questions when is_list(questions) <- Question.get_list_by_code(code) do
+      render(conn, "index.json", question: questions)
     else
       errs -> errs
     end

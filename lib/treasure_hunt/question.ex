@@ -1,10 +1,10 @@
 defmodule TreasureHunt.Question do
-  alias TreasureHunt.Core.Question
   alias TreasureHunt.Core
 
-  def get_by_code(code) do
-    with question = %Question{} <- Core.get_question_by_hashed_code!(code) do
-      question
+  def get_list_by_code(code) do
+    with questions when is_list(questions) and questions != [] <-
+           Core.get_question_by_hashed_code!(code) do
+      questions
     else
       errs -> errs
     end

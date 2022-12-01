@@ -16,7 +16,7 @@ defmodule TreasureHuntWeb.Api.ClueView do
       location: clue.location.plus_code,
       location_name: clue.location.name,
       location_address: clue.location.address,
-      question_code: clue.question.code
+      question_code: clue.code
     }
   end
 
@@ -26,10 +26,16 @@ defmodule TreasureHuntWeb.Api.ClueView do
       location: clue.location.plus_code,
       location_name: clue.location.name,
       location_address: clue.location.address,
-      question: clue.question.content,
-      question_code: clue.question.code,
-      question_answer: clue.question.answer,
-      answer: clue.answer,
+      question_1: clue.question_1.content,
+      question_2: clue.question_2.content,
+      question_3: clue.question_3.content,
+      question_code: clue.code,
+      question_answer_1: clue.question_1.answer,
+      question_answer_2: clue.question_2.answer,
+      question_answer_3: clue.question_3.answer,
+      answer_1: clue.answer_1,
+      answer_2: clue.answer_2,
+      answer_3: clue.answer_3,
       question_type: "text"
     }
   end
