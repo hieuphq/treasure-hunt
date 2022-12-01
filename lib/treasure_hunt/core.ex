@@ -76,6 +76,8 @@ defmodule TreasureHunt.Core do
     locations = list_locations()
     questions = list_questions()
 
+    no_question = 3
+
     intitial_data = %{locations: locations, questions: questions, result: []}
 
     pre_data =
@@ -89,24 +91,40 @@ defmodule TreasureHunt.Core do
             Enum.filter(locs, fn l -> l.id != random_loc.id end)
           end
 
-        random_question = Enum.random(ques)
+        %{questions: filtered_ques, rs: random_questions} =
+          Enum.reduce(1..no_question, %{questions: ques, rs: %{}}, fn idx,
+                                                                      %{
+                                                                        questions: curr_ques,
+                                                                        rs: rs
+                                                                      } ->
+            random_question = Enum.random(curr_ques)
 
-        filtered_ques =
-          if length(ques) <= 1 do
-            ques
-          else
-            Enum.filter(ques, fn l -> l.id != random_question.id end)
-          end
+            filtered_qs =
+              if length(curr_ques) <= 1 do
+                curr_ques
+              else
+                Enum.filter(curr_ques, fn l -> l.id != random_question.id end)
+              end
 
-        raw_code = "#{random_question.code}#{team_code}"
+            new_rs = Map.put(rs, idx, random_question)
+            %{questions: filtered_qs, rs: new_rs}
+          end)
+
+        code = "#{Util.generate_code(32)}"
+        raw_code = "#{code}#{team_code}"
         hashed_code = :crypto.hash(:md5, raw_code) |> Base.encode16(case: :lower)
 
         raw = %{
           location_id: random_loc.id,
-          question_id: random_question.id,
+          code: code,
           sort: idx,
-          code: hashed_code
+          hashed_code: hashed_code
         }
+
+        raw =
+          Enum.reduce(random_questions, raw, fn {idx, q}, acc ->
+            Map.put(acc, String.to_atom("question_#{idx}_id"), q.id)
+          end)
 
         %{
           locations: filtered_locs,
@@ -117,17 +135,23 @@ defmodule TreasureHunt.Core do
 
     Enum.map(pre_data.result, fn %{
                                    location_id: location_id,
-                                   question_id: question_id,
+                                   question_1_id: question_1_id,
+                                   question_2_id: question_2_id,
+                                   question_3_id: question_3_id,
+                                   hashed_code: hashed_code,
                                    sort: sort,
                                    code: code
                                  } ->
       %TreasureHunt.Core.Clue{
         location_id: location_id,
-        question_id: question_id,
+        question_1_id: question_1_id,
+        question_2_id: question_2_id,
+        question_3_id: question_3_id,
         team_id: team_id,
         done_at: nil,
         sort: sort,
         status: "new",
+        hashed_code: hashed_code,
         code: code
       }
       |> TreasureHunt.Repo.insert!()
@@ -226,14 +250,19 @@ defmodule TreasureHunt.Core do
       ** (Ecto.NoResultsError)
 
   """
-  def get_question_by_hashed_code!(code) do
-    Repo.get_by(Clue, code: code)
+  def get_question_by_hashed_code!(hashed_code) do
+    Repo.get_by(Clue, hashed_code: hashed_code)
+    |> Repo.preload([:question_1, :question_2, :question_3])
     |> case do
       nil ->
         {:error, :not_found}
 
-      %Clue{question_id: question_id} ->
-        Repo.get!(Question, question_id)
+      %Clue{
+        question_1: question_1,
+        question_2: question_2,
+        question_3: question_3
+      } ->
+        [question_1, question_2, question_3]
     end
   end
 
@@ -421,7 +450,7 @@ defmodule TreasureHunt.Core do
     query =
       from c in Clue,
         where: c.team_id == ^team_id,
-        preload: [:question, :location]
+        preload: [:question_1, :question_2, :question_3, :location]
 
     Repo.all(query)
   end
@@ -442,7 +471,7 @@ defmodule TreasureHunt.Core do
   """
   def get_clue!(id) do
     Repo.get!(Clue, id)
-    |> Repo.preload([:question, :location])
+    |> Repo.preload([:question_1, :question_2, :question_3, :location])
   end
 
   @doc """

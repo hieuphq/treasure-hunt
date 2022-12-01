@@ -4,8 +4,8 @@ defmodule TreasureHuntWeb.Api.ClueController do
 
   action_fallback TreasureHuntWeb.FallbackController
 
-  def answer(conn, %{"clue_id" => clue_id, "answer" => answer}) do
-    result = Team.submit_answer(clue_id, answer)
+  def answer(conn, %{"clue_id" => clue_id, "answers" => answers}) do
+    result = Team.submit_answers(clue_id, answers)
 
     case result do
       :ok ->
